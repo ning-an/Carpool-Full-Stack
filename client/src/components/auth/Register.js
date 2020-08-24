@@ -1,19 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useParams, useHistory } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 
 import { COLORS } from "../../Constants";
-// import SignupForm from "./SignupForm";
-import { signup } from "..//../helpers/api-helper";
+import { validateData, signUp } from "..//../helpers/api-helper";
+import { LoginSuccess } from "../../reducer/actions";
 
 export default function Register() {
   const { role } = useParams();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [cfpassword, setCfpassword] = useState("");
+  const [make, setMake] = useState("");
+  const [model, setModel] = useState("");
+  const [plate, setPlate] = useState("");
+  const [seats, setSeats] = useState(0);
+  const [error, setError] = useState(null);
+  // const {name, email, password, make, model, plate, seats, error } = useSelector(state=> state.user)
+  const dispatch = useDispatch();
   const history = useHistory();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const {
+    const errors = validateData({
       name,
       email,
       password,
@@ -22,26 +34,21 @@ export default function Register() {
       model,
       plate,
       seats,
-    } = e.target;
-    let userData = {
-      name: name.value,
-      email: email.value,
-      password: password.value,
-      cfpassword: cfpassword.value,
-      driver: false,
-    };
-    if (role === "driver") {
-      userData = {
-        ...userData,
-        driver: true,
-        make: make.value,
-        model: model.value,
-        plate: plate.value,
-        seats: seats.value,
-      };
+      driver: role === "driver",
+    });
+    if (errors.length > 0) {
+      setError(errors);
+    } else {
+      const res = await signUp();
+      if (!res.ok) {
+        const jsonData = await res.json();
+        errors.push(jsonData);
+      } else {
+        const jsonDataSuccess = await res.json();
+        dispatch(LoginSuccess(jsonDataSuccess.msg[0]));
+        history.push("/users/login");
+      }
     }
-    signup(userData);
-    history.push("/users/login");
   };
   return (
     <Wrapper>
@@ -55,23 +62,79 @@ export default function Register() {
         </li>
       </Tabs>
       <Form onSubmit={handleSubmit}>
+        {error && (
+          <ErrorMsg>
+            {error.map((err, index) => (
+              <li key={index}>{err.msg}</li>
+            ))}
+          </ErrorMsg>
+        )}
         <label htmlFor="name">Name</label>
-        <input type="text" name="name" id="name" required />
+        <input
+          type="text"
+          name="name"
+          id="name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
         <label htmlFor="email">Email</label>
-        <input type="email" name="email" id="email" required />
+        <input
+          type="email"
+          name="email"
+          id="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
         <label htmlFor="password">Password</label>
-        <input type="password" name="password" id="password" required />
+        <input
+          type="password"
+          name="password"
+          id="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
         <label htmlFor="cfpassword">Confirm Password</label>
-        <input type="password" name="cfpassword" id="cfpassword" required />
+        <input
+          type="password"
+          name="cfpassword"
+          id="cfpassword"
+          value={cfpassword}
+          onChange={(e) => setCfpassword(e.target.value)}
+          required
+        />
         {role === "driver" && (
           <>
             <h2>Car Information</h2>
             <label htmlFor="make">Make</label>
-            <input type="text" name="make" id="make" required />
+            <input
+              type="text"
+              name="make"
+              id="make"
+              value={make}
+              onChange={(e) => setMake(e.target.value)}
+              required
+            />
             <label htmlFor="model">Model</label>
-            <input type="text" name="model" id="model" required />
+            <input
+              type="text"
+              name="model"
+              id="model"
+              value={model}
+              onChange={(e) => setModel(e.target.value)}
+              required
+            />
             <label htmlFor="plate">Plate No.</label>
-            <input type="text" name="plate" id="plate" required />
+            <input
+              type="text"
+              name="plate"
+              id="plate"
+              value={plate}
+              onChange={(e) => setPlate(e.target.value)}
+              required
+            />
             <label htmlFor="seats">Available Seats</label>
             <input
               type="number"
@@ -79,6 +142,8 @@ export default function Register() {
               id="seats"
               min="1"
               max="5"
+              value={seats}
+              onChange={(e) => setSeats(e.target.value)}
               required
             />
           </>
@@ -123,6 +188,18 @@ const Tabs = styled.ul`
     &:visited {
       color: white;
     }
+  }
+`;
+
+const ErrorMsg = styled.ul`
+  li {
+    list-style: square;
+    padding: 10px;
+    margin: 10px 0;
+    background-color: ${COLORS.appleCore};
+    color: white;
+    border-radius: 4px;
+    box-shadow: 0 0 5px 1px lightgrey;
   }
 `;
 

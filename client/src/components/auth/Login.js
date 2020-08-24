@@ -1,14 +1,17 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import { COLORS } from "../../Constants";
 
 const Login = () => {
+  const { status, msg } = useSelector((state) => state.login);
   return (
     <Wrapper>
-      <h1>Log In</h1>
+      <h1>Login</h1>
       <Form>
+        {status === "success" && <Msg>{msg}</Msg>}
         <label htmlFor="email">Email</label>
         <input type="email" name="email" id="email" required />
         <label htmlFor="password">Password</label>
@@ -69,6 +72,15 @@ const Form = styled.form`
   a {
     color: ${COLORS.citrus};
   }
+`;
+
+const Msg = styled.div`
+  padding: 10px;
+  margin: 10px 0;
+  background-color: ${COLORS.appleCore};
+  color: white;
+  border-radius: 4px;
+  box-shadow: 0 0 5px 1px lightgrey;
 `;
 
 export default Login;
