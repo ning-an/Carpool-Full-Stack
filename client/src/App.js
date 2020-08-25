@@ -6,16 +6,17 @@ import Header from "./components/Header";
 import Home from "./components/Home";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
+import Map from "./components/map";
 
 function App() {
   return (
     <>
       <GlobalStyle />
-      <Header />
       <Router>
+        <Header />
         <Switch>
           <Route exact path="/">
-            <Home />
+            <Map />
           </Route>
           <Route path="/users/register/:role">
             <Register />

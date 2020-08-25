@@ -3,9 +3,6 @@ require("dotenv").config();
 const assert = require("assert");
 const bcrypt = require("bcrypt");
 
-// User model
-const User = require("../models/User");
-
 const { MONGO_URI } = process.env;
 
 const options = {
@@ -33,8 +30,7 @@ const createUser = async (req, res) => {
       const r = await db.collection("users").insertOne(newUser);
       assert.equal(1, r.insertedCount);
       client.close();
-      req.flash("success_msg", "You are now registered and can log in");
-      res.status(201).json({ msg: req.flash("success_msg") });
+      res.status(201).json({ msg: "You are now registered and can log in" });
     }
   } catch (err) {
     res.status(400).json({ msg: err.message });
@@ -42,7 +38,7 @@ const createUser = async (req, res) => {
 };
 
 const getUserByEmail = async (email) => {
-  const client = await MongoClient(MONGO_URI, optiosn);
+  const client = await MongoClient(MONGO_URI, options);
   await client.connect();
   const db = client.db("vroom");
   const user = await db.collection("users").findOne({ email });
@@ -51,11 +47,32 @@ const getUserByEmail = async (email) => {
 };
 
 const getUserById = async (_id) => {
-  const client = await MongoClient(MONGO_URI, optiosn);
+  const client = await MongoClient(MONGO_URI, options);
   await client.connect();
   const db = client.db("vroom");
   const user = await db.collection("users").findOne({ _id });
   client.close();
   return user;
 };
-module.exports = { createUser, getUserByEmail, getUserById };
+
+const checkAuthenticated = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.status(404).json({ msg: "Please log in to post your trip" });
+};
+
+const checkNotAuthenticated = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    return res.status(404).json({ msg: "You are already logged in" });
+  }
+  next();
+};
+
+module.exports = {
+  createUser,
+  getUserByEmail,
+  getUserById,
+  checkAuthenticated,
+  checkNotAuthenticated,
+};

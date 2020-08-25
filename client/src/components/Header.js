@@ -1,11 +1,24 @@
 import React from "react";
 import styled from "styled-components";
+import { useSelector, useDispatch } from "react-redux";
+import { NavLink, useHistory } from "react-router-dom";
 
 import { AiOutlineHome } from "react-icons/ai";
-import { MdMyLocation } from "react-icons/md";
 import Logo from "../logo.png";
+import { COLORS } from "../Constants";
+import { logout } from "../helpers/api-helper";
+import { Logout } from "../reducer/actions";
 
 export default function Header() {
+  const { status } = useSelector((state) => state.login);
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const logoutHandler = () => {
+    logout();
+    dispatch(Logout());
+    history.push("/users/login");
+  };
   return (
     <Wrapper>
       <AiOutlineHome style={IconStyle} />
@@ -13,7 +26,18 @@ export default function Header() {
         <img src={Logo} alt="company logo" />
         <h1>VROOM</h1>
       </Trademark>
-      <MdMyLocation style={IconStyle} />
+      {status === "logged-in" ? (
+        <LogoutBtn onClick={logoutHandler}>Log Out</LogoutBtn>
+      ) : (
+        <BtnDiv>
+          <NavLink to="/users/register/passenger" activeClassName="selected">
+            Sign Up
+          </NavLink>
+          <NavLink to="/users/login" activeClassName="selected">
+            Login
+          </NavLink>
+        </BtnDiv>
+      )}
     </Wrapper>
   );
 }
@@ -42,3 +66,29 @@ const Trademark = styled.div`
 const IconStyle = {
   fontSize: "1.5em",
 };
+
+const LogoutBtn = styled.button`
+  padding: 10px;
+  border: none;
+  background: transparent;
+`;
+
+const BtnDiv = styled.div`
+  display: flex;
+  justify-content: space-between;
+
+  a {
+    padding: 10px;
+    margin: 10px;
+  }
+
+  &:visited,
+  &:active {
+    color: black;
+  }
+
+  .selected {
+    background-color: ${COLORS.apricot};
+    color: white;
+  }
+`;

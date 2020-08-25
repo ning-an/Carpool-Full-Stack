@@ -68,3 +68,16 @@ export const signUp = () => {
   };
   return fetch("/users/register", option);
 };
+
+export const login = (data) => {
+  const option = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  };
+  return fetch("/users/login", option);
+};
+
+export const logout = () => {
+  return fetch("/users/logout").then((res) => res.json());
+};

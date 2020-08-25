@@ -1,21 +1,62 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { Link, useHistory } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 
 import { COLORS } from "../../Constants";
+import { login } from "../../helpers/api-helper";
+import { LoginFailure, LoginSuccess } from "../../reducer/actions";
 
 const Login = () => {
   const { status, msg } = useSelector((state) => state.login);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  useEffect(() => {
+    fetch("/users/login").then((res) => {
+      if (!res.ok) {
+        history.push("/");
+      }
+    });
+  }, []);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const res = await login({ email, password });
+    if (!res.ok) {
+      const jsonData = await res.json();
+      console.log(jsonData);
+      dispatch(LoginFailure(jsonData.msg));
+    } else {
+      dispatch(LoginSuccess());
+      history.push("/");
+    }
+  };
   return (
     <Wrapper>
       <h1>Login</h1>
-      <Form>
-        {status === "success" && <Msg>{msg}</Msg>}
+      <Form onSubmit={handleLogin}>
+        {status !== "idle" && <Msg>{msg}</Msg>}
         <label htmlFor="email">Email</label>
-        <input type="email" name="email" id="email" required />
+        <input
+          type="email"
+          name="email"
+          id="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
         <label htmlFor="password">Password</label>
-        <input type="password" name="password" id="password" required />
+        <input
+          type="password"
+          name="password"
+          id="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
         <button>Log in</button>
         <p>
           Not registered yet?

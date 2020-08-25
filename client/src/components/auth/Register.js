@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useParams, useHistory } from "react-router-dom";
@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { COLORS } from "../../Constants";
 import { validateData, signUp } from "..//../helpers/api-helper";
-import { LoginSuccess } from "../../reducer/actions";
+import { RegisterSuccess } from "../../reducer/actions";
 
 export default function Register() {
   const { role } = useParams();
@@ -22,6 +22,14 @@ export default function Register() {
   // const {name, email, password, make, model, plate, seats, error } = useSelector(state=> state.user)
   const dispatch = useDispatch();
   const history = useHistory();
+
+  useEffect(() => {
+    fetch("/users/register").then((res) => {
+      if (!res.ok) {
+        history.push("/");
+      }
+    });
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,7 +53,7 @@ export default function Register() {
         errors.push(jsonData);
       } else {
         const jsonDataSuccess = await res.json();
-        dispatch(LoginSuccess(jsonDataSuccess.msg[0]));
+        dispatch(RegisterSuccess(jsonDataSuccess.msg));
         history.push("/users/login");
       }
     }
