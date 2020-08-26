@@ -17,6 +17,7 @@ const Login = () => {
   useEffect(() => {
     fetch("/users/login").then((res) => {
       if (!res.ok) {
+        dispatch(LoginSuccess());
         history.push("/");
       }
     });

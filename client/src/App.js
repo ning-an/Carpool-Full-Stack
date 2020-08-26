@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import styled from "styled-components";
 
 import GlobalStyle from "./components/GlobalStyles";
 import Header from "./components/Header";
@@ -10,7 +11,7 @@ import Map from "./components/map";
 
 function App() {
   return (
-    <>
+    <Wrapper>
       <GlobalStyle />
       <Router>
         <Header />
@@ -26,8 +27,12 @@ function App() {
           </Route>
         </Switch>
       </Router>
-    </>
+    </Wrapper>
   );
 }
+
+const Wrapper = styled.div`
+  margin: 0 50px;
+`;
 
 export default App;
