@@ -7,9 +7,9 @@ const { createUser, checkNotAuthenticated } = require("./routesHelpers");
 
 // Register
 router.post("/register", checkNotAuthenticated, createUser);
-router.get("/register", checkNotAuthenticated, (req, res) => {
-  res.send("okay");
-});
+// router.get("/register", checkNotAuthenticated, (req, res) => {
+//   res.send("okay");
+// });
 
 // Login
 router.post("/login", (req, res, next) => {
@@ -24,7 +24,7 @@ router.post("/login", (req, res, next) => {
         if (err) {
           return next(err);
         }
-        return res.status(200).json({ msg: "Welcome" });
+        return res.status(200).json(user);
       });
     }
   })(req, res, next);

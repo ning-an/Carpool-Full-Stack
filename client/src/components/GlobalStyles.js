@@ -29,12 +29,21 @@ time, mark, audio, video {
   a {
     text-decoration: none;
    
-    /* &:visited {
-    color: inherit; */
+    &:visited {
+    color: inherit;
+  }
   }
 
   button {
     cursor: pointer;
+    border: none;
+    
+    &:focus {
+      outline: none;
+    }
+  }
+
+  input {
     &:focus {
       outline: none;
     }

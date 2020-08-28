@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { NavLink, useHistory } from "react-router-dom";
+import { NavLink, useHistory, Link } from "react-router-dom";
 
 import { AiOutlineHome } from "react-icons/ai";
 import Logo from "../logo.png";
@@ -21,7 +21,9 @@ export default function Header() {
   };
   return (
     <Wrapper>
-      <AiOutlineHome style={IconStyle} />
+      <Link to="/" style={{ width: "200px", paddingTop: "5px" }}>
+        <AiOutlineHome style={IconStyle} />
+      </Link>
       <Trademark>
         <img src={Logo} alt="company logo" />
         <h1>VROOM</h1>
@@ -71,9 +73,13 @@ const LogoutBtn = styled.button`
   padding: 10px;
   border: none;
   background: transparent;
+  font-size: 16px;
+  width: 200px;
+  text-align: right;
 `;
 
 const BtnDiv = styled.div`
+  width: 200px;
   display: flex;
   justify-content: space-between;
 

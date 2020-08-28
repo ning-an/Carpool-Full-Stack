@@ -8,6 +8,7 @@ import Home from "./components/Home";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import Map from "./components/map";
+import Dialog from "./components/ConfirmDialog";
 
 function App() {
   return (
@@ -17,13 +18,16 @@ function App() {
         <Header />
         <Switch>
           <Route exact path="/">
-            <Map />
+            <Home />
           </Route>
           <Route path="/users/register/:role">
             <Register />
           </Route>
           <Route path="/users/login">
             <Login />
+          </Route>
+          <Route path="/test">
+            <Dialog />
           </Route>
         </Switch>
       </Router>

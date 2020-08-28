@@ -5,8 +5,8 @@ import { useParams, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 import { COLORS } from "../../Constants";
-import { validateData, signUp } from "..//../helpers/api-helper";
-import { RegisterSuccess } from "../../reducer/actions";
+import { validateData, signUp, checkAuth } from "..//../helpers/api-helper";
+import { RegisterSuccess, LoginSuccess } from "../../reducer/actions";
 
 export default function Register() {
   const { role } = useParams();
@@ -23,12 +23,18 @@ export default function Register() {
   const dispatch = useDispatch();
   const history = useHistory();
 
+  // Authentication check
+  const checkAuth = async () => {
+    const res = await fetch("/users/login");
+    if (!res.ok) {
+      const user = await res.json();
+      dispatch(LoginSuccess(user));
+      history.push("/");
+    }
+  };
+
   useEffect(() => {
-    fetch("/users/register").then((res) => {
-      if (!res.ok) {
-        history.push("/");
-      }
-    });
+    checkAuth();
   }, []);
 
   const handleSubmit = async (e) => {

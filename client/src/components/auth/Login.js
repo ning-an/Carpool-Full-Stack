@@ -14,13 +14,18 @@ const Login = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
+  // Authentication check
+  const checkAuth = async () => {
+    const res = await fetch("/users/login");
+    if (!res.ok) {
+      const user = await res.json();
+      dispatch(LoginSuccess(user));
+      history.push("/");
+    }
+  };
+
   useEffect(() => {
-    fetch("/users/login").then((res) => {
-      if (!res.ok) {
-        dispatch(LoginSuccess());
-        history.push("/");
-      }
-    });
+    checkAuth();
   }, []);
 
   const handleLogin = async (e) => {
@@ -28,10 +33,10 @@ const Login = () => {
     const res = await login({ email, password });
     if (!res.ok) {
       const jsonData = await res.json();
-      console.log(jsonData);
       dispatch(LoginFailure(jsonData.msg));
     } else {
-      dispatch(LoginSuccess());
+      const user = await res.json();
+      dispatch(LoginSuccess(user));
       history.push("/");
     }
   };

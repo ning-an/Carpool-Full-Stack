@@ -1,18 +1,26 @@
 const initialState = {
   status: "idle",
   msg: "",
+  driver: false,
+  name: null,
 };
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case "REGISTER-SUCCESS":
-      return { status: "signed-up", msg: action.msg };
+      return { ...state, status: "signed-up", msg: action.msg };
     case "LOGIN-FAILURE":
-      return { status: "login-error", msg: action.msg };
+      return { ...state, status: "login-error", msg: action.msg };
     case "LOGIN-SUCCESS":
-      return { status: "logged-in", msg: "" };
+      return {
+        ...state,
+        status: "logged-in",
+        msg: "",
+        name: action.user.name,
+        driver: action.user.driver,
+      };
     case "LOGOUT":
-      return { status: "logged-out", msg: "You are logged out" };
+      return { ...state, status: "logged-out", msg: "You are logged out" };
     default:
       return state;
   }

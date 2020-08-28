@@ -78,6 +78,16 @@ export const login = (data) => {
   return fetch("/users/login", option);
 };
 
+// Authentication check
+export const checkAuth = async () => {
+  const res = await fetch("/users/login");
+  if (!res.ok) {
+    const user = await res.json();
+    return user;
+  }
+  return null;
+};
+
 export const logout = () => {
   return fetch("/users/logout").then((res) => res.json());
 };

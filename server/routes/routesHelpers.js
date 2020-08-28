@@ -1,4 +1,4 @@
-const { MongoClient } = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb");
 require("dotenv").config();
 const assert = require("assert");
 const bcrypt = require("bcrypt");
@@ -50,7 +50,7 @@ const getUserById = async (_id) => {
   const client = await MongoClient(MONGO_URI, options);
   await client.connect();
   const db = client.db("vroom");
-  const user = await db.collection("users").findOne({ _id });
+  const user = await db.collection("users").findOne(ObjectId(_id));
   client.close();
   return user;
 };
@@ -64,7 +64,7 @@ const checkAuthenticated = (req, res, next) => {
 
 const checkNotAuthenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
-    return res.status(404).json({ msg: "You are already logged in" });
+    return res.status(404).json(req.user);
   }
   next();
 };

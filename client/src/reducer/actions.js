@@ -1,9 +1,8 @@
-export const RegisterSuccess = (msg) => {
-  return {
-    type: "REGISTER-SUCCESS",
-    msg,
-  };
-};
+// Register and Login actions
+export const RegisterSuccess = (msg) => ({
+  type: "REGISTER-SUCCESS",
+  msg,
+});
 
 export const LoginFailure = (msg) => {
   return {
@@ -12,12 +11,48 @@ export const LoginFailure = (msg) => {
   };
 };
 
-export const LoginSuccess = () => {
+export const LoginSuccess = (user) => ({
+  type: "LOGIN-SUCCESS",
+  user,
+});
+
+export const Logout = () => ({ type: "LOGOUT" });
+
+// Map related trip actions
+export const PrepareTrip = ({ start, end, distanceTxt, distanceNum }) => {
   return {
-    type: "LOGIN-SUCCESS",
+    type: "PREPARE-TRIP",
+    data: { origin: start, destination: end, distanceNum, distanceTxt },
   };
 };
 
-export const Logout = () => {
-  return { type: "LOGOUT" };
-};
+// User related trip actions
+export const AddSeats = (seats) => ({ type: "ADD-SEATS", seats });
+
+export const AddEarlyDate = (earlyDate) => ({
+  type: "ADD-EARLY-DATE",
+  earlyDate,
+});
+
+export const AddEarlyTime = (earlyTime) => ({
+  type: "ADD-EARLY-TIME",
+  earlyTime,
+});
+
+export const AddLateDate = (lateDate) => ({
+  type: "ADD-LATE-DATE",
+  lateDate,
+});
+
+export const AddLateTime = (lateTime) => ({
+  type: "ADD-LATE-TIME",
+  lateTime,
+});
+
+export const SelectRole = (role) => ({ type: "SELECT-ROLE", role });
+
+export const SubmitTrip = () => ({ type: "SUBMIT-TRIP" });
+
+export const PostTrip = () => ({ type: "POST-TRIP" });
+
+export const QuitPost = () => ({ type: "QUIT-POST" });

@@ -1,13 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+
+import Map from "./map";
+import TripForm from "./TripForm";
 
 export default function Home() {
   const history = useHistory();
-  console.log(process.env);
-  fetch("/dashboard").then((res) => {
-    if (!res.ok) {
-      history.push("/users/login");
-    }
-  });
-  return <div>Home</div>;
+  // fetch("/dashboard").then((res) => {
+  //   if (!res.ok) {
+  //     history.push("/users/login");
+  //   }
+  // });
+
+  return (
+    <div>
+      <Map />
+      <TripForm />
+    </div>
+  );
 }
