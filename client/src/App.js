@@ -7,8 +7,7 @@ import Header from "./components/Header";
 import Home from "./components/Home";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
-import Map from "./components/map";
-import Dialog from "./components/ConfirmDialog";
+import Test from "./components/Test";
 
 function App() {
   return (
@@ -27,7 +26,7 @@ function App() {
             <Login />
           </Route>
           <Route path="/test">
-            <Dialog />
+            <Test />
           </Route>
         </Switch>
       </Router>

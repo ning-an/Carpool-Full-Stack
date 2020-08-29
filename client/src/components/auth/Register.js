@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useParams, useHistory } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import { COLORS } from "../../Constants";
-import { validateData, signUp, checkAuth } from "..//../helpers/api-helper";
+import { validateData, signUp } from "..//../helpers/api-helper";
 import { RegisterSuccess, LoginSuccess } from "../../reducer/actions";
 
 export default function Register() {
@@ -19,7 +19,7 @@ export default function Register() {
   const [plate, setPlate] = useState("");
   const [seats, setSeats] = useState(0);
   const [error, setError] = useState(null);
-  // const {name, email, password, make, model, plate, seats, error } = useSelector(state=> state.user)
+
   const dispatch = useDispatch();
   const history = useHistory();
 

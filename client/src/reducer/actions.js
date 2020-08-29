@@ -49,7 +49,7 @@ export const AddLateTime = (lateTime) => ({
   lateTime,
 });
 
-export const SelectRole = (role) => ({ type: "SELECT-ROLE", role });
+export const SelectRole = (beDriver) => ({ type: "SELECT-ROLE", beDriver });
 
 export const SubmitTrip = () => ({ type: "SUBMIT-TRIP" });
 

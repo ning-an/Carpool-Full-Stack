@@ -78,16 +78,15 @@ export const login = (data) => {
   return fetch("/users/login", option);
 };
 
-// Authentication check
-export const checkAuth = async () => {
-  const res = await fetch("/users/login");
-  if (!res.ok) {
-    const user = await res.json();
-    return user;
-  }
-  return null;
-};
-
 export const logout = () => {
   return fetch("/users/logout").then((res) => res.json());
+};
+
+export const postNewTrip = (trip) => {
+  const option = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(trip),
+  };
+  return fetch("/trips", option);
 };

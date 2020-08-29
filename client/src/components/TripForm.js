@@ -29,7 +29,7 @@ export default function TripForm() {
   };
 
   return (
-    <div>
+    <Wrapper>
       {driver && (
         <RoleSelct>
           <input
@@ -37,7 +37,7 @@ export default function TripForm() {
             id="passenger"
             name="role"
             value={false}
-            checked
+            // checked
             onClick={handleRadioClick}
           />
           <label htmlFor="passenger">Passenger</label>
@@ -110,12 +110,20 @@ export default function TripForm() {
         <SubmitBtn onClick={handleBtnClick}>GO</SubmitBtn>
       </InputSec>
       {status === "pending" && <Dialog />}
-    </div>
+    </Wrapper>
   );
 }
 
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
 const InputSec = styled.div`
   margin-top: ${({ driver }) => driver || "100px"};
+  width: 100%;
+  box-sizing: border-box;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
@@ -163,11 +171,11 @@ const RoleSelct = styled.div`
     padding: 5px 20px;
     margin: 0;
     background: ${COLORS.blueberry};
-    filter: brightness(40%);
+    filter: brightness(60%);
   }
 
   input:checked + label {
-    filter: brightness(80%);
+    filter: brightness(100%);
   }
 
   label + input + label {

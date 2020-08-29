@@ -6,6 +6,7 @@ import moment from "moment";
 import { calcPriceByDistance } from "../helpers/handlers";
 import { QuitPost, PostTrip } from "../reducer/actions";
 import { COLORS } from "../Constants";
+import { postNewTrip } from "../helpers/api-helper";
 
 export default function Dialog() {
   const { origin, destination, distanceTxt, distanceNum } = useSelector(
@@ -18,12 +19,13 @@ export default function Dialog() {
     lateDate,
     lateTime,
     status,
+    beDriver,
   } = useSelector((state) => state.user);
   const { driver, name } = useSelector((state) => state.login);
   const dispatch = useDispatch();
 
-  const errors = [];
   // Data vapdation
+  const errors = [];
   const earlySchedule = earlyDate + " " + earlyTime;
   const lateSchedule = lateDate + " " + lateTime;
   if (
@@ -45,7 +47,7 @@ export default function Dialog() {
   }
   if (moment(earlySchedule).isAfter(moment(lateSchedule))) {
     errors.push(
-      "The latest leaving time can not be earper than the earpest leaving time."
+      "The latest leaving time can not be earlier than the earliest leaving time."
     );
   }
 
@@ -53,6 +55,20 @@ export default function Dialog() {
   const passengerPrice = calcPriceByDistance(distanceNum, seats);
   const driverGainL = calcPriceByDistance(distanceNum, seats); // lowest gain when passengers are from 1 order
   const driverGainH = calcPriceByDistance(distanceNum, 1) * seats; // highest gain with full load while each passenger has its own order
+
+  // Post trip btn click handler
+  const postTripHandler = () => {
+    dispatch(PostTrip());
+    postNewTrip({
+      origin,
+      destination,
+      seats,
+      earlySchedule,
+      lateSchedule,
+      beDriver,
+    });
+  };
+
   if (errors.length > 0 && status === "pending") {
     return (
       <>
@@ -93,7 +109,7 @@ export default function Dialog() {
           </Row>
           <Row>
             <ConfirmBtn onClick={() => dispatch(QuitPost())}>Cancel</ConfirmBtn>
-            <ConfirmBtn onClick={() => dispatch(PostTrip())}>Post</ConfirmBtn>
+            <ConfirmBtn onClick={postTripHandler}>Post</ConfirmBtn>
           </Row>
         </ConfirmWrapper>
       </>

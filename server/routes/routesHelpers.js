@@ -69,10 +69,28 @@ const checkNotAuthenticated = (req, res, next) => {
   next();
 };
 
+const createTrip = async (req, res) => {
+  const { _id } = req.user;
+  const trip = req.body;
+  try {
+    const client = await MongoClient(MONGO_URI, options);
+    await client.connect();
+    const db = client.db("vroom");
+    const user = await db
+      .collection("trips")
+      .insertOne({ userId: _id, ...trip });
+    client.close();
+    res.status(201).json({ status: 201, msg: "Trip posted" });
+  } catch (e) {
+    res.status(400).json({ msg: err.message });
+  }
+};
+
 module.exports = {
   createUser,
   getUserByEmail,
   getUserById,
   checkAuthenticated,
   checkNotAuthenticated,
+  createTrip,
 };

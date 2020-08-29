@@ -3,7 +3,7 @@ const session = require("express-session");
 require("dotenv").config();
 const passport = require("passport");
 
-const { checkAuthenticated } = require("./routes/routesHelpers");
+const { checkAuthenticated, createTrip } = require("./routes/routesHelpers");
 
 const app = express();
 
@@ -36,6 +36,9 @@ app.use("/users", require("./routes/users"));
 app.get("/dashboard", checkAuthenticated, (req, res) => {
   res.send(req.user.name);
 });
+
+// Trips
+app.post("/trips", createTrip);
 
 // Listen
 app.listen(PORT, () => console.log(`Server running on port ${PORT}...`));

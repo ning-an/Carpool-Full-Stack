@@ -4,7 +4,7 @@ const initialState = {
   earlyTime: null,
   lateDate: null,
   lateTime: null,
-  role: "passenger",
+  beDriver: false,
   status: "idle",
   error: null,
 };
@@ -12,7 +12,7 @@ const initialState = {
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case "SELECT-ROLE":
-      return { ...state, role: action.role };
+      return { ...state, beDriver: action.beDriver };
     case "ADD-SEATS":
       return { ...state, seats: action.seats };
     case "ADD-EARLY-DATE":
