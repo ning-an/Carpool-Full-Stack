@@ -60,7 +60,7 @@ export default function Register() {
       } else {
         const jsonDataSuccess = await res.json();
         dispatch(RegisterSuccess(jsonDataSuccess.msg));
-        history.push("/users/login");
+        history.push("/login");
       }
     }
   };
@@ -69,10 +69,10 @@ export default function Register() {
       <h1>Sign up</h1>
       <Tabs>
         <li>
-          <Link to="/users/register/passenger">Passenger</Link>
+          <Link to="/register/passenger">Passenger</Link>
         </li>
         <li>
-          <Link to="/users/register/driver">Driver</Link>
+          <Link to="/register/driver">Driver</Link>
         </li>
       </Tabs>
       <Form onSubmit={handleSubmit}>
@@ -164,7 +164,7 @@ export default function Register() {
         )}
         <button type="submit">Register</button>
         <p>
-          Already have an account? <Link to="/users/login"> Login</Link>
+          Already have an account? <Link to="/login"> Login</Link>
         </p>
       </Form>
     </Wrapper>
@@ -258,5 +258,9 @@ const Form = styled.form`
 
   a {
     color: ${COLORS.citrus};
+
+    &:visited {
+      color: ${COLORS.apricot};
+    }
   }
 `;

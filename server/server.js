@@ -3,7 +3,7 @@ const session = require("express-session");
 require("dotenv").config();
 const passport = require("passport");
 
-const { checkAuthenticated, createTrip } = require("./routes/routesHelpers");
+const { checkAuthenticated } = require("./routes/routesHelpers");
 
 const app = express();
 
@@ -20,8 +20,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(
   session({
     secret: "secret",
-    resave: true,
-    saveUninitialized: true,
+    resave: false,
+    saveUninitialized: false,
   })
 );
 
@@ -30,7 +30,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // User register and login
-app.use("/users", require("./routes/users"));
+app.use("/api/users", require("./routes/users"));
 
 // Dashboard
 app.get("/dashboard", checkAuthenticated, (req, res) => {
@@ -38,7 +38,7 @@ app.get("/dashboard", checkAuthenticated, (req, res) => {
 });
 
 // Trips
-app.post("/trips", createTrip);
+app.use("/api/trips", require("./routes/trips"));
 
 // Listen
 app.listen(PORT, () => console.log(`Server running on port ${PORT}...`));

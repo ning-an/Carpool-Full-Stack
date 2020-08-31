@@ -31,13 +31,17 @@ router.post("/login", (req, res, next) => {
 });
 
 router.get("/login", checkNotAuthenticated, (req, res) => {
-  res.send("okay");
+  res.status(200).json({ status: 200 });
 });
 
 // Logout
-router.get("/logout", (req, res) => {
-  req.logout();
-  res.status(200).json({ msg: "You are logged out" });
+router.delete("/logout", (req, res) => {
+  req.logOut();
+  req.session.destroy((err) => {
+    res.clearCookie("connect.sid");
+    res.status(200).json({ msg: "You are logged out" });
+  });
+  // req.session.destroy();
 });
 
 module.exports = router;

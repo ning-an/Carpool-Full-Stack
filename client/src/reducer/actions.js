@@ -56,3 +56,8 @@ export const SubmitTrip = () => ({ type: "SUBMIT-TRIP" });
 export const PostTrip = () => ({ type: "POST-TRIP" });
 
 export const QuitPost = () => ({ type: "QUIT-POST" });
+
+export const SubtractSeats = (seatsTaken) => ({
+  type: "SUBTRACT-SEATS",
+  seatsTaken,
+});

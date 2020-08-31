@@ -102,7 +102,6 @@ const MapWithAMarker = withScriptjs(
       // Place_change event handler
       const handlePlaceChange = () => {
         const place = autocomplete.getPlace();
-        console.log(place.address_components);
         const startAddress = {
           address: place.formatted_address,
           city: place.address_components.find(

@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
+import { Link, useHistory } from "react-router-dom";
 
 import { calcPriceByDistance } from "../helpers/handlers";
 import { QuitPost, PostTrip } from "../reducer/actions";
@@ -21,8 +22,11 @@ export default function Dialog() {
     status,
     beDriver,
   } = useSelector((state) => state.user);
-  const { driver, name } = useSelector((state) => state.login);
+  const { driver, name, status: loginStatus } = useSelector(
+    (state) => state.login
+  );
   const dispatch = useDispatch();
+  const history = useHistory();
 
   // Data vapdation
   const errors = [];
@@ -57,9 +61,8 @@ export default function Dialog() {
   const driverGainH = calcPriceByDistance(distanceNum, 1) * seats; // highest gain with full load while each passenger has its own order
 
   // Post trip btn click handler
-  const postTripHandler = () => {
-    dispatch(PostTrip());
-    postNewTrip({
+  const postTripHandler = async () => {
+    const { _id } = await postNewTrip({
       origin,
       destination,
       seats,
@@ -67,6 +70,8 @@ export default function Dialog() {
       lateSchedule,
       beDriver,
     });
+    dispatch(PostTrip());
+    history.push(`/trips/${_id}`);
   };
 
   if (errors.length > 0 && status === "pending") {
@@ -104,12 +109,20 @@ export default function Dialog() {
           <Row>
             <LeftCol>{driver ? "Gain" : "Price"}</LeftCol>
             <RightCol>
-              {driver ? `${driverGainL} - ${driverGainH}` : passengerPrice}
+              {driver
+                ? `${driverGainL} - ${driverGainH}$`
+                : `${passengerPrice}$`}
             </RightCol>
           </Row>
           <Row>
             <ConfirmBtn onClick={() => dispatch(QuitPost())}>Cancel</ConfirmBtn>
-            <ConfirmBtn onClick={postTripHandler}>Post</ConfirmBtn>
+            {loginStatus === "logged-in" ? (
+              <ConfirmBtn onClick={postTripHandler}>Post</ConfirmBtn>
+            ) : (
+              <ConfirmBtn>
+                <Link to="/login">Login Now</Link>
+              </ConfirmBtn>
+            )}
           </Row>
         </ConfirmWrapper>
       </>
@@ -137,7 +150,7 @@ const Wrapper = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   width: 400px;
-  height: 200px;
+  height: 255px;
   box-shadow: 0 0 5px 1px lightgrey;
   border-radius: 4px;
   color: white;
@@ -170,6 +183,7 @@ const Row = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 10px;
 `;
 
 const LeftCol = styled.div`
@@ -181,12 +195,13 @@ const RightCol = styled.div`
 `;
 
 const ConfirmBtn = styled.button`
-  width: 100px;
+  width: 120px;
   padding: 5px;
   background-color: ${COLORS.apricot};
   color: white;
   border-radius: 4px;
-  margin: 10px;
+  box-shadow: 0 0 5px 1px lightgrey;
+  margin: 40px 40px 10px;
 
   &:hover {
     transform: scale(0.98);

@@ -66,7 +66,7 @@ export const signUp = () => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(userData),
   };
-  return fetch("/users/register", option);
+  return fetch("/api/users/register", option);
 };
 
 export const login = (data) => {
@@ -75,11 +75,13 @@ export const login = (data) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   };
-  return fetch("/users/login", option);
+  return fetch("/api/users/login", option);
 };
 
 export const logout = () => {
-  return fetch("/users/logout").then((res) => res.json());
+  return fetch("/api/users/logout", { method: "DELETE" }).then((res) =>
+    res.json()
+  );
 };
 
 export const postNewTrip = (trip) => {
@@ -88,5 +90,49 @@ export const postNewTrip = (trip) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(trip),
   };
-  return fetch("/trips", option);
+  return fetch("/api/trips", option).then((res) => res.json());
+};
+
+export const getCurrentTrip = (_id) => {
+  return fetch(`/api/trips/${_id}`).then((res) => res.json());
+};
+
+export const getMatchedTrips = (id) => {
+  return fetch(`/api/trips/matched/${id}`).then((res) => res.json());
+};
+
+export const addInvite = (matchedTrip_id, myTrip_id) => {
+  const option = {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ matchedTrip_id }),
+  };
+  return fetch(`/api/trips/addInvite/${myTrip_id}`, option);
+};
+
+export const cancelInvite = (matchedTrip_id, myTrip_id) => {
+  const option = {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ matchedTrip_id }),
+  };
+  return fetch(`/api/trips/removeInvite/${myTrip_id}`, option);
+};
+
+export const addPick = (matchedTrip_id, myTrip_id, seats, status) => {
+  const option = {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ matchedTrip_id, seats, status }),
+  };
+  return fetch(`/api/trips/addPick/${myTrip_id}`, option);
+};
+
+export const cancelPick = (matchedTrip_id, myTrip_id, seats, status) => {
+  const option = {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ matchedTrip_id, seats, status }),
+  };
+  return fetch(`/api/trips/cancelPick/${myTrip_id}`, option);
 };

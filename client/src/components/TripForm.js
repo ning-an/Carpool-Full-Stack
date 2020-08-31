@@ -21,7 +21,7 @@ export default function TripForm() {
 
   const dispatch = useDispatch();
   const handleRadioClick = (e) => {
-    dispatch(SelectRole(e.target.value));
+    dispatch(SelectRole(e.target.value === "driver"));
   };
 
   const handleBtnClick = () => {
@@ -36,7 +36,7 @@ export default function TripForm() {
             type="radio"
             id="passenger"
             name="role"
-            value={false}
+            value="passenger"
             // checked
             onClick={handleRadioClick}
           />
@@ -45,7 +45,7 @@ export default function TripForm() {
             type="radio"
             id="driver"
             name="role"
-            value={true}
+            value="driver"
             onClick={handleRadioClick}
           />
           <label htmlFor="driver">Driver</label>
@@ -57,10 +57,7 @@ export default function TripForm() {
           <select
             name="seats"
             id="seats"
-            onChange={(e) => {
-              console.log("dropdown type", typeof e.target.value);
-              dispatch(AddSeats(e.target.value));
-            }}
+            onChange={(e) => dispatch(AddSeats(Number(e.target.value)))}
           >
             <option value="1">1</option>
             <option value="2">2</option>

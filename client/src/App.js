@@ -8,6 +8,8 @@ import Home from "./components/Home";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import Test from "./components/Test";
+import Trips from "./components/Trips";
+import Confirmation from "./components/Confirmation";
 
 function App() {
   return (
@@ -19,14 +21,17 @@ function App() {
           <Route exact path="/">
             <Home />
           </Route>
-          <Route path="/users/register/:role">
+          <Route path="/register/:role">
             <Register />
           </Route>
-          <Route path="/users/login">
+          <Route path="/login">
             <Login />
           </Route>
-          <Route path="/test">
-            <Test />
+          <Route path="/trips/:_id">
+            <Trips />
+          </Route>
+          <Route path="/trips/confirmation/:_id">
+            <Confirmation />
           </Route>
         </Switch>
       </Router>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { NavLink, useHistory, Link } from "react-router-dom";
@@ -14,11 +14,12 @@ export default function Header() {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const logoutHandler = () => {
-    logout();
+  const logoutHandler = async () => {
+    await logout();
     dispatch(Logout());
-    history.push("/users/login");
+    history.push("/login");
   };
+
   return (
     <Wrapper>
       <Link to="/" style={{ width: "200px", paddingTop: "5px" }}>
@@ -32,10 +33,10 @@ export default function Header() {
         <LogoutBtn onClick={logoutHandler}>Log Out</LogoutBtn>
       ) : (
         <BtnDiv>
-          <NavLink to="/users/register/passenger" activeClassName="selected">
+          <NavLink to="/register/passenger" activeClassName="selected">
             Sign Up
           </NavLink>
-          <NavLink to="/users/login" activeClassName="selected">
+          <NavLink to="/login" activeClassName="selected">
             Login
           </NavLink>
         </BtnDiv>

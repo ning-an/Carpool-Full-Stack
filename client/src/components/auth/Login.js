@@ -66,7 +66,7 @@ const Login = () => {
         <button>Log in</button>
         <p>
           Not registered yet?
-          <Link to="/users/register/passenger"> Sign up</Link>
+          <Link to="/register/passenger"> Sign up</Link>
         </p>
       </Form>
     </Wrapper>
@@ -103,6 +103,7 @@ const Form = styled.form`
     border-radius: 4px;
     border: none;
     box-shadow: 0 0 3px 1px lightgrey;
+    padding-left: 16px;
   }
 
   button {
@@ -118,6 +119,10 @@ const Form = styled.form`
   }
   a {
     color: ${COLORS.citrus};
+
+    &:visited {
+      color: ${COLORS.apricot};
+    }
   }
 `;
 

@@ -20,7 +20,11 @@ export default function reducer(state = initialState, action) {
         driver: action.user.driver,
       };
     case "LOGOUT":
-      return { ...state, status: "logged-out", msg: "You are logged out" };
+      return {
+        ...initialState,
+        status: "logged-out",
+        msg: "You are logged out",
+      };
     default:
       return state;
   }

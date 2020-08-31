@@ -6,7 +6,7 @@ const initialState = {
   lateTime: null,
   beDriver: false,
   status: "idle",
-  error: null,
+  matchedTrips: null,
 };
 
 export default function reducer(state = initialState, action) {
@@ -31,6 +31,8 @@ export default function reducer(state = initialState, action) {
       return { ...state, status: "idle" };
     case "CANCEL-TRIP":
       return { ...initialState };
+    case "SUBTRACT-SEATS":
+      return { ...state, seats: state.seats - action.seatsTaken };
     default:
       return state;
   }
