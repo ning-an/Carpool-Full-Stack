@@ -46,10 +46,8 @@ export default function Tracking() {
         matchArray.push(res.trip);
       }
     }
-    const filterMatchArray = matchArray.filter(
-      (elem) => elem.status === "idle"
-    );
-    setCurrentMatches(filterMatchArray.length === 0 ? null : filterMatchArray);
+
+    setCurrentMatches(matchArray.length === 0 ? null : matchArray);
     setCurrentTrip(res.trip);
   };
 
