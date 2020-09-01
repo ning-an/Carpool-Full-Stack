@@ -7,9 +7,9 @@ import Header from "./components/Header";
 import Home from "./components/Home";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
-import Test from "./components/Test";
-import Trips from "./components/Trips";
-import Confirmation from "./components/Confirmation";
+import MatchedTrips from "./components/MatchedTrips";
+import TripDetail from "./components/TripDetail";
+import Mytrips from "./components/Mytrips";
 
 function App() {
   return (
@@ -27,11 +27,14 @@ function App() {
           <Route path="/login">
             <Login />
           </Route>
-          <Route path="/trips/:_id">
-            <Trips />
+          <Route path="/trips/users/:userId">
+            <Mytrips />
           </Route>
-          <Route path="/trips/confirmation/:_id">
-            <Confirmation />
+          <Route path="/trips/MatchedTrips/:_id">
+            <MatchedTrips />
+          </Route>
+          <Route path="/trips/details/:_id">
+            <TripDetail />
           </Route>
         </Switch>
       </Router>

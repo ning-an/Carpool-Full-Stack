@@ -93,8 +93,21 @@ export const postNewTrip = (trip) => {
   return fetch("/api/trips", option).then((res) => res.json());
 };
 
+export const cancelPost = (_id, invite, match) => {
+  const option = {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ invite, match }),
+  };
+  return fetch(`/api/trips/cancel/${_id}`, option).then((res) => res.json());
+};
+
 export const getCurrentTrip = (_id) => {
   return fetch(`/api/trips/${_id}`).then((res) => res.json());
+};
+
+export const getTripsForCurrentUser = (_id) => {
+  return fetch(`/api/trips/users/${_id}`).then((res) => res.json());
 };
 
 export const getMatchedTrips = (id) => {

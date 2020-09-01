@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 
 import { COLORS } from "../Constants";
 import {
@@ -8,8 +9,9 @@ import {
   cancelInvite,
   addPick,
   cancelPick,
+  cancelPost,
 } from "../helpers/api-helper";
-import { SubtractSeats } from "../reducer/actions";
+import { SubtractSeats, CancelTrip } from "../reducer/actions";
 
 export default function Trip(props) {
   const { seats: availableSeats } = useSelector((state) => state.user);
@@ -26,12 +28,17 @@ export default function Trip(props) {
     myTrip_id,
     invite,
     match,
+    label,
+    status,
   } = props;
 
-  const [hasInvited, setHasInvited] = useState(() =>
-    invite.includes(myTrip_id)
+  const [hasInvited, setHasInvited] = useState(
+    () => invite.includes(myTrip_id) || label === "invitations"
   );
   const [hasPicked, setHasPicked] = useState(() => match.includes(myTrip_id));
+  const [hasCancelled, setHasCancelled] = useState(
+    () => status === "cancelled"
+  );
 
   const handleInvite = async () => {
     if (hasInvited) {
@@ -55,25 +62,33 @@ export default function Trip(props) {
     setHasPicked(!hasPicked);
   };
 
+  const handleCancel = async () => {
+    if (!hasCancelled) {
+      await cancelPost(matchedTrip_id, invite, match);
+      setHasCancelled(true);
+      dispatch(CancelTrip());
+    }
+  };
+
   return (
     <Wrapper>
-      <Row>
-        <LeftCol>From</LeftCol>
-        <RightCol>{origin}</RightCol>
-      </Row>
-      <Row>
-        <LeftCol>To</LeftCol>
-        <RightCol>{destination}</RightCol>
-      </Row>
-      <Row>
-        {earlySchedule} - {lateSchedule}
-      </Row>
-      <Row>
-        <LeftCol>
+      <Cols>
+        <Left>From</Left>
+        <Left>To</Left>
+        <Left>
           {beDriver ? "Offer" : "Want"} <Seats>{seats}</Seats> seat(s){" "}
-        </LeftCol>
-        <RightCol>
-          {beDriver ? (
+        </Left>
+      </Cols>
+      <Cols>
+        <Middle>{origin}</Middle>
+        <Middle>{destination}</Middle>
+        <Middle>
+          {earlySchedule} ---- {lateSchedule}
+        </Middle>
+      </Cols>
+      <Cols>
+        {(label === "matchedTrips" || label === "invitations") &&
+          (beDriver ? (
             <StyledBtn onClick={handleInvite} hasInvited={hasInvited}>
               {hasInvited ? "Cancel" : "Invite"}
             </StyledBtn>
@@ -85,41 +100,60 @@ export default function Trip(props) {
             >
               {hasPicked ? "Cancel" : "Pick"}
             </StyledBtn>
-          )}
-        </RightCol>
-      </Row>
+          ))}
+        {(label === "historyTrips" || label === "detail") && (
+          <>
+            {label === "historyTrips" && (
+              <StyledBtn disabled={hasCancelled === true}>
+                <Link to={`/trips/details/${matchedTrip_id}`}>Details</Link>
+              </StyledBtn>
+            )}
+            <StyledBtn
+              disabled={status === "fulfilled" || hasCancelled === true}
+              onClick={handleCancel}
+            >
+              {status === "fulfilled"
+                ? "Completed"
+                : hasCancelled
+                ? "Cancelled"
+                : "Cancel"}
+            </StyledBtn>
+          </>
+        )}
+      </Cols>
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
   width: 100%;
+  height: 150px;
   box-sizing: border-box;
   padding: 10px;
   display: flex;
-  flex-direction: column;
   justify-content: space-evenly;
-  background-color: ${COLORS.appleCore};
+  background-color: ${COLORS.blueberry};
   color: white;
   border-radius: 4px;
   margin-top: 20px;
+  box-shadow: 0 0 10px 1px grey;
 `;
 
-const Row = styled.div`
+const Cols = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 10px;
+  flex-direction: column;
+  justify-content: space-evenly;
 `;
 
-const LeftCol = styled.div`
-  flex-basis: 20%;
-  font-weight: bold;
+const Left = styled.div`
+  text-align: left;
+  width: 200px;
 `;
 
-const RightCol = styled.div`
-  position: relative;
-  flex-basis: 70%;
+const Middle = styled.div`
+  text-align: center;
+  width: 800px;
+  margin-left: -80px;
 `;
 
 const Seats = styled.span`
@@ -129,15 +163,13 @@ const Seats = styled.span`
 `;
 
 const StyledBtn = styled.button`
-  background-color: ${COLORS.blueberry};
+  background-color: ${COLORS.apricot};
   color: white;
-  font-size: 16px;
-  position: absolute;
-  right: 0;
-  top: -5px;
+  font-size: 20px;
   border-radius: 4px;
-  padding: 8px 30px;
-  box-shadow: 0 0 5px 1px lightgrey;
+  box-shadow: 0 0 5px 0.5px lightgrey;
+  width: 120px;
+  height: 40px;
 
   ${({ hasInvited }) => hasInvited && "filter: brightness(60%)"};
   ${({ hasPicked }) => hasPicked && "filter: brightness(60%)"};
@@ -150,6 +182,14 @@ const StyledBtn = styled.button`
     cursor: not-allowed;
     pointer-events: none;
     color: #c0c0c0;
-    background-color: #ffffff;
+    background-color: #f0f0f0;
+  }
+
+  a {
+    color: white;
+
+    &:visited {
+      color: white;
+    }
   }
 `;

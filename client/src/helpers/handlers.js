@@ -4,13 +4,13 @@ export const calcPriceByDistance = (distance, NumOfPassengers) => {
   // Multiplier: 2 ppl - 1.5, 3 ppl - 2.2, 4 ppl - 3
   let multiplier;
   switch (NumOfPassengers) {
-    case "4":
+    case 4:
       multiplier = 3;
       break;
-    case "3":
+    case 3:
       multiplier = 2.2;
       break;
-    case "2":
+    case 2:
       multiplier = 1.5;
       break;
     default:

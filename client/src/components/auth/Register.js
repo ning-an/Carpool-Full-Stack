@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import styled from "styled-components";
 import { useParams, useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -25,7 +25,7 @@ export default function Register() {
 
   // Authentication check
   const checkAuth = async () => {
-    const res = await fetch("/users/login");
+    const res = await fetch("/api/users/login");
     if (!res.ok) {
       const user = await res.json();
       dispatch(LoginSuccess(user));
@@ -56,7 +56,7 @@ export default function Register() {
       const res = await signUp();
       if (!res.ok) {
         const jsonData = await res.json();
-        errors.push(jsonData);
+        setError([...errors, jsonData]);
       } else {
         const jsonDataSuccess = await res.json();
         dispatch(RegisterSuccess(jsonDataSuccess.msg));
@@ -69,10 +69,14 @@ export default function Register() {
       <h1>Sign up</h1>
       <Tabs>
         <li>
-          <Link to="/register/passenger">Passenger</Link>
+          <NavLink to="/register/passenger" activeClassName="selected">
+            Passenger
+          </NavLink>
         </li>
         <li>
-          <Link to="/register/driver">Driver</Link>
+          <NavLink to="/register/driver" activeClassName="selected">
+            Driver
+          </NavLink>
         </li>
       </Tabs>
       <Form onSubmit={handleSubmit}>
@@ -83,6 +87,7 @@ export default function Register() {
             ))}
           </ErrorMsg>
         )}
+        <Line />
         <label htmlFor="name">Name</label>
         <input
           type="text"
@@ -186,21 +191,27 @@ const Tabs = styled.ul`
   display: flex;
   position: relative;
   left: -100px;
+  top: 5px;
 
   li {
     background-color: ${COLORS.apricot};
-    padding: 10px 20px 5px;
+    padding: 10px 20px 10px;
     margin-right: 10px;
     transform: skewX(-20deg);
     border-radius: 4px;
-  }
 
-  a {
-    display: block;
-    transform: skewX(20deg);
+    a {
+      display: block;
+      transform: skewX(20deg);
+      filter: brightness(80%);
 
-    &:visited {
-      color: white;
+      &:visited {
+        color: white;
+      }
+    }
+    .selected {
+      font-weight: bold;
+      filter: brightness(100%);
     }
   }
 `;
@@ -222,6 +233,8 @@ const Form = styled.form`
   padding: 20px;
   border-radius: 4px;
   box-shadow: 0 0 5px 2px lightgrey;
+  z-index: 2;
+  background-color: white;
 
   label {
     display: block;
@@ -236,6 +249,7 @@ const Form = styled.form`
     border-radius: 4px;
     border: none;
     box-shadow: 0 0 3px 1px lightgrey;
+    padding-left: 16px;
   }
 
   h2 {
@@ -263,4 +277,8 @@ const Form = styled.form`
       color: ${COLORS.apricot};
     }
   }
+`;
+
+const Line = styled.div`
+  border-top: 1px solid ${COLORS.apricot};
 `;

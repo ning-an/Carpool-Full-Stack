@@ -103,6 +103,23 @@ const getCurrentTripInfo = async (req, res) => {
   }
 };
 
+const getTripsForCurrentUser = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const client = await MongoClient(MONGO_URI, options);
+    await client.connect();
+    const db = client.db("vroom");
+    const trips = await db
+      .collection("trips")
+      .find({ userId: ObjectId(userId) })
+      .toArray();
+    client.close();
+    res.status(200).json({ trips });
+  } catch (e) {
+    res.status(400).json({ msg: e.message });
+  }
+};
+
 const findMatchedTrips = async (req, res) => {
   const { _id } = req.params;
   try {
@@ -131,6 +148,7 @@ const findMatchedTrips = async (req, res) => {
       // filter history trips by status and those already matched with other driver
       if (
         trip.status === "fulfilled" ||
+        trip.status === "cancelled" ||
         (trip.status === "matched" && !trip.match.includes(_id))
       ) {
         return false;
@@ -233,16 +251,14 @@ const cancelPick = async (req, res) => {
     const client = await MongoClient(MONGO_URI, options);
     await client.connect();
     const db = client.db("vroom");
-    await db
-      .collection("trips")
-      .updateOne(
-        { _id: ObjectId(_id) },
-        {
-          $pull: { match: matchedTrip_id },
-          $inc: { seats: seats },
-          $set: { status },
-        }
-      );
+    await db.collection("trips").updateOne(
+      { _id: ObjectId(_id) },
+      {
+        $pull: { match: matchedTrip_id },
+        $inc: { seats: seats },
+        $set: { status },
+      }
+    );
     await db
       .collection("trips")
       .updateOne(
@@ -252,6 +268,44 @@ const cancelPick = async (req, res) => {
     client.close();
     res.status(200).json({ msg: "Pick cancelled" });
   } catch (err) {
+    res.status(400).json({ msg: err.message });
+  }
+};
+
+const cancelPostedTrip = async (req, res) => {
+  const { _id } = req.params;
+  const { invite, match } = req.body;
+  try {
+    const client = await MongoClient(MONGO_URI, options);
+    await client.connect();
+    const db = client.db("vroom");
+    await db.collection("trips").updateOne(
+      { _id: ObjectId(_id) },
+      {
+        $set: { status: "cancelled", invite: [], match: [] },
+      }
+    );
+    if (invite.length > 0) {
+      for (const trip of invite) {
+        await db
+          .collection("trips")
+          .updateOne({ _id: ObjectId(trip) }, { $pull: { invite: _id } });
+      }
+    }
+    if (match.length > 0) {
+      for (const trip of match) {
+        await db
+          .collection("trips")
+          .updateOne(
+            { _id: ObjectId(trip) },
+            { $pull: { match: _id }, $set: { status: "idle" } }
+          );
+      }
+    }
+    client.close();
+    res.status(200).json({ msg: "Trip cancelled" });
+  } catch (err) {
+    console.log(err.message);
     res.status(400).json({ msg: err.message });
   }
 };
@@ -269,4 +323,6 @@ module.exports = {
   addInvitation,
   pickPassenger,
   cancelPick,
+  getTripsForCurrentUser,
+  cancelPostedTrip,
 };

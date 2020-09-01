@@ -124,7 +124,7 @@ const InputSec = styled.div`
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  background-color: ${COLORS.appleCore};
+  background-color: ${COLORS.blueberry};
   color: white;
   padding: 16px;
 
@@ -151,7 +151,7 @@ const InputSec = styled.div`
 `;
 
 const RoleSelct = styled.div`
-  border: solid 3px ${COLORS.blueberry};
+  border: solid 3px ${COLORS.apricot};
   border-radius: 10px;
   overflow: hidden;
   margin-top: 100px;
@@ -165,10 +165,12 @@ const RoleSelct = styled.div`
     display: inline-block;
     cursor: pointer;
     font-weight: bold;
-    padding: 5px 20px;
+    width: 122px;
     margin: 0;
-    background: ${COLORS.blueberry};
-    filter: brightness(60%);
+    padding: 5px;
+    text-align: center;
+    background: ${COLORS.apricot};
+    filter: brightness(80%);
   }
 
   input:checked + label {
@@ -176,7 +178,7 @@ const RoleSelct = styled.div`
   }
 
   label + input + label {
-    border-left: solid 3px ${COLORS.blueberry};
+    border-left: solid 3px ${COLORS.apricot};
   }
 `;
 
@@ -228,12 +230,14 @@ const MiddleLine = styled.div`
 `;
 
 const SubmitBtn = styled.button`
-  background-color: ${COLORS.blueberry};
+  background-color: ${COLORS.apricot};
   color: white;
   border-radius: 4px;
   border: none;
-  box-shadow: 0 0 5px 1px white;
-  padding: 5px 20px;
+  box-shadow: 0 0 5px 0.5px lightgrey;
+  width: 120px;
+  height: 40px;
+  font-size: 20px;
   margin: 10px;
 
   @media (max-width: 768px) {

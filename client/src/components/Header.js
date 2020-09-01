@@ -10,7 +10,7 @@ import { logout } from "../helpers/api-helper";
 import { Logout } from "../reducer/actions";
 
 export default function Header() {
-  const { status } = useSelector((state) => state.login);
+  const { status, userId } = useSelector((state) => state.login);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -25,10 +25,12 @@ export default function Header() {
       <Link to="/" style={{ width: "200px", paddingTop: "5px" }}>
         <AiOutlineHome style={IconStyle} />
       </Link>
-      <Trademark>
-        <img src={Logo} alt="company logo" />
-        <h1>VROOM</h1>
-      </Trademark>
+      <Link to={`/trips/users/${userId}`}>
+        <Trademark>
+          <img src={Logo} alt="company logo" />
+          <h1>VROOM</h1>
+        </Trademark>
+      </Link>
       {status === "logged-in" ? (
         <LogoutBtn onClick={logoutHandler}>Log Out</LogoutBtn>
       ) : (
@@ -53,6 +55,15 @@ const Wrapper = styled.div`
   align-items: center;
   padding: 10px 20px;
   box-shadow: 0 1px 10px 1px lightgrey;
+
+  a {
+    color: black;
+
+    &:visited,
+    &:active {
+      color: black;
+    }
+  }
 `;
 
 const Trademark = styled.div`
@@ -89,13 +100,10 @@ const BtnDiv = styled.div`
     margin: 10px;
   }
 
-  &:visited,
-  &:active {
-    color: black;
-  }
-
   .selected {
     background-color: ${COLORS.apricot};
+    border-radius: 4px;
+    box-shadow: 0 0 10px 1px lightgrey;
     color: white;
   }
 `;

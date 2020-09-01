@@ -16,7 +16,7 @@ const Login = () => {
 
   // Authentication check
   const checkAuth = async () => {
-    const res = await fetch("/users/login");
+    const res = await fetch("/api/users/login");
     if (!res.ok) {
       const user = await res.json();
       dispatch(LoginSuccess(user));

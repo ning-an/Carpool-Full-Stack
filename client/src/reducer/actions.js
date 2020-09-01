@@ -61,3 +61,8 @@ export const SubtractSeats = (seatsTaken) => ({
   type: "SUBTRACT-SEATS",
   seatsTaken,
 });
+
+// trip detail page init and cancel
+export const InitTrip = () => ({ type: "INIT" });
+
+export const CancelTrip = () => ({ type: "CANCEL" });

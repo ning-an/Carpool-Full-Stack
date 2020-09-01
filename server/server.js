@@ -20,8 +20,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(
   session({
     secret: "secret",
-    resave: false,
-    saveUninitialized: false,
+    resave: true,
+    saveUninitialized: true,
   })
 );
 
@@ -31,11 +31,6 @@ app.use(passport.session());
 
 // User register and login
 app.use("/api/users", require("./routes/users"));
-
-// Dashboard
-app.get("/dashboard", checkAuthenticated, (req, res) => {
-  res.send(req.user.name);
-});
 
 // Trips
 app.use("/api/trips", require("./routes/trips"));

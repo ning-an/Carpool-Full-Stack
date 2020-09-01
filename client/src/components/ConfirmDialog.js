@@ -71,7 +71,7 @@ export default function Dialog() {
       beDriver,
     });
     dispatch(PostTrip());
-    history.push(`/trips/${_id}`);
+    history.push(`/trips/MatchedTrips/${_id}`);
   };
 
   if (errors.length > 0 && status === "pending") {
@@ -138,7 +138,7 @@ const Backdrop = styled.div`
   left: 0;
   width: 100vw;
   height: 100vh;
-  opacity: 0.5;
+  opacity: 0.7;
   background-color: black;
   z-index: 2;
 `;

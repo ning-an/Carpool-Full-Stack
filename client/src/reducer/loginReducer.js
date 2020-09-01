@@ -3,6 +3,7 @@ const initialState = {
   msg: "",
   driver: false,
   name: null,
+  userId: null,
 };
 
 export default function reducer(state = initialState, action) {
@@ -18,6 +19,7 @@ export default function reducer(state = initialState, action) {
         msg: "",
         name: action.user.name,
         driver: action.user.driver,
+        userId: action.user._id,
       };
     case "LOGOUT":
       return {
