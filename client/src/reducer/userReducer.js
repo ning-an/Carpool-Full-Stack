@@ -29,7 +29,7 @@ export default function reducer(state = initialState, action) {
       return { ...state, status: "posted" };
     case "QUIT-POST":
       return { ...state, status: "idle" };
-    case "CANCEL-TRIP":
+    case "LOGOUT":
       return { ...initialState };
     case "SUBTRACT-SEATS":
       return { ...state, seats: state.seats - action.seatsTaken };

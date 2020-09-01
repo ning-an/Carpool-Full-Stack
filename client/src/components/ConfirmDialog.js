@@ -103,13 +103,13 @@ export default function Dialog() {
             </RightCol>
           </Row>
           <Row>
-            <LeftCol>{driver ? "Offer" : "Want"}</LeftCol>
+            <LeftCol>{beDriver ? "Offer" : "Want"}</LeftCol>
             <RightCol>{seats} seats</RightCol>
           </Row>
           <Row>
-            <LeftCol>{driver ? "Gain" : "Price"}</LeftCol>
+            <LeftCol>{beDriver ? "Gain" : "Price"}</LeftCol>
             <RightCol>
-              {driver
+              {beDriver
                 ? `${driverGainL} - ${driverGainH}$`
                 : `${passengerPrice}$`}
             </RightCol>

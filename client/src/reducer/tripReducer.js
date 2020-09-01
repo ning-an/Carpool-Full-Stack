@@ -11,6 +11,8 @@ export default function Reducer(state = initialState, action) {
       return { ...state, ...action.data };
     case "CANCEL-TRIP":
       return { ...initialState };
+    case "LOGOUT":
+      return { ...initialState };
     default:
       return state;
   }
