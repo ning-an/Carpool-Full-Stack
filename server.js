@@ -30,6 +30,7 @@ app.use(passport.session());
 
 app.use(express.static(__dirname));
 app.use(express.static(path.join(__dirname, "build")));
+app.use(express.static(path.join(__dirname, "server")));
 
 // User register and login
 app.use("/api/users", require("./server/routes/users"));
