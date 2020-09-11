@@ -114,7 +114,7 @@ const MapWithAMarker = withScriptjs(
             (elem) => elem.types[0] === "administrative_area_level_1"
           ).long_name,
           lng: place.geometry.viewport.Va.i,
-          lat: place.geometry.viewport.Za.i,
+          lat: place.geometry.viewport.ab.i,
         };
         setStart(startAddress);
         setFromInput(startAddress.address);
@@ -151,7 +151,7 @@ const MapWithAMarker = withScriptjs(
             (elem) => elem.types[0] === "administrative_area_level_1"
           ).long_name,
           lng: place.geometry.viewport.Va.i,
-          lat: place.geometry.viewport.Za.i,
+          lat: place.geometry.viewport.ab.i,
         };
         setEnd(endAddress);
         setToInput(endAddress.address);

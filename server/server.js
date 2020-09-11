@@ -3,8 +3,6 @@ const session = require("express-session");
 require("dotenv").config();
 const passport = require("passport");
 
-const { checkAuthenticated } = require("./routes/routesHelpers");
-
 const app = express();
 
 const PORT = process.env.PORT;
