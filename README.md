@@ -4,6 +4,8 @@
 
 Vroom is a carpool app that allows pasengers and drivers to publish their trips to fill in the available seats, so as to save/earn money.
 
+[View Live Demo](https://carpool-project-an.herokuapp.com)
+
 ## Instructions
 
 The homepage of the app is mainly a map with some input area where users can fill in trip-related information. Anyone can have access to this page to get a quote of their potential trip, but in order to publish their trip either as a driver or a passenger, he/she will have to log in.
